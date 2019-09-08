@@ -45,27 +45,39 @@
     client.on('ready', ()=> {	
 
         dashboard = new Dashboard(client);
+        client.addonList = [];
+        client.addons = {};
 
-        client.log( 'Sylver booted up as ' + client.user.username )
+        client.log( 'Logged into discord as user: [ ' + client.user.tag + ' ]' )
         require('fs').readdirSync(__dirname + '/instance/').forEach(function(file) {
+
+            // Log.
             client.debug('Loading ' + file);
-            require('/instance/' + file)();
+
+            // Create a instance of the addon we just loaded.
+            let addon = require(__dirname + '/instance/' + file);
+            let addonInstance = new addon();
+
+            if(addonInstance.init != undefined){
+                addonInstance.init();
+            }else{
+                client.warn("Addon " + addonInstance.name + " does not have a init()!")
+            }
+
+            // Store it somewhere in the cool shit.
+            client.addonList.push(addonInstance);
+            client.addons[addonInstance.name] = addonInstance;
+
         });
 
-        client.guilds.each( guild =>{
-
-            
-            guildConfig = new StorageManager(client, 'guildConfig-' + guild.id, false, false)
-            guildConfig.once('newFile', (ready)=> {
-
-                guildConfig.register('prefix', 's!');
-                guildConfig.save();
-        
-                client.log('Config generated for ' + guild.name);
-                ready();
-        
-            })
-
+        client.addonList.forEach( addon => {
+            if(addon.postInit != undefined){
+                addon.postInit();
+            }else{
+                client.warn("Addon " + addon.name + " does not have a postInit()!")
+            }
         })
+
+        client.emit('addonListLoaded', client.addonList)
 
     })

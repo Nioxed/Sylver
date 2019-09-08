@@ -1,4 +1,5 @@
 const Discord           = require('discord.js')
+const CommandManager    = require('./commands.js')
 
 class Sylver extends Discord.Client {
 
