@@ -3,7 +3,7 @@ class guildSettings{
     constructor(){
 
         // Modify the values below :)
-        this.name = "perGuildSettings"
+        this.name = "guildSettings"
         this.description = "Allow different configs for every guild."
         this.version = "1.0.0"
 
@@ -12,7 +12,7 @@ class guildSettings{
     init(){
 
         client.guilds.each( guild =>{
-            
+
             let guildConfig = new StorageManager(client, 'guildConfig-' + guild.id, false, false)
             guildConfig.once('newFile', (ready)=> {
 

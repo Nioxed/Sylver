@@ -58,15 +58,17 @@
             let addon = require(__dirname + '/instance/' + file);
             let addonInstance = new addon();
 
+            // Store it somewhere in the cool shit.
+            client.addonList.push(addonInstance);
+            client.addons[addonInstance.name] = addonInstance;
+
+            // run init
             if(addonInstance.init != undefined){
                 addonInstance.init();
             }else{
                 client.warn("Addon " + addonInstance.name + " does not have a init()!")
             }
 
-            // Store it somewhere in the cool shit.
-            client.addonList.push(addonInstance);
-            client.addons[addonInstance.name] = addonInstance;
 
         });
 

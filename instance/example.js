@@ -28,7 +28,7 @@ class ExampleAddon{
 
     init(){
 
-        client.log('You can call client from within addons!')
+        //client.log('You can call client from within addons!')
 
     }
 

@@ -21,7 +21,13 @@ class CommandManager {
 
     parse(client, messageContent){
 
-        const parsed = parser.parse(message, prefix);
+        return parser.parse(message, prefix);
+
+    }
+
+    registerCommand(addon, trigger, options){
+
+        
 
     }
 
