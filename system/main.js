@@ -22,7 +22,6 @@ class Sylver extends Discord.Client {
         process.on('EXIT', function() { obj.shutdown(); });
 
         this.debug('Hold system registered')
-
         this.emit('SylverInitialized');
 
     }

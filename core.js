@@ -6,12 +6,16 @@
     caller 		            = require('caller');
     colors 		            = require('colors');
 
+    fs                      = require('fs')
+    path                    = require('path')
+
     const Sylver            = require('./system/main.js')
     StorageManager          = require('./system/storageManager.js')
     const Dashboard         = require('./system/dashboard.js')
 
     client              = new Sylver({ shardCount: "auto" });
     config              = new StorageManager(client, 'config', true, false)
+    parser              = require('discord-command-parser')
     dashboard           = []
     
     client.log('Sylver is starting...')
@@ -64,7 +68,7 @@
 
             // run init
             if(addonInstance.init != undefined){
-                addonInstance.init();
+                addonInstance.init(addonInstance);
             }else{
                 client.warn("Addon " + addonInstance.name + " does not have a init()!")
             }
@@ -74,7 +78,7 @@
 
         client.addonList.forEach( addon => {
             if(addon.postInit != undefined){
-                addon.postInit();
+                addon.postInit(addon);
             }else{
                 client.warn("Addon " + addon.name + " does not have a postInit()!")
             }
