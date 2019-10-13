@@ -5,32 +5,34 @@ class guildSettings{
         // Modify the values below :)
         this.name = "guildSettings"
         this.description = "Allow different configs for every guild."
-        this.version = "1.0.0"
+        this.version = "1.1.0"
+
+        this.configs = {};
 
     }
 
     init(){
 
-        client.guilds.each( guild =>{
-
-            let guildConfig = new StorageManager(client, 'guildConfig-' + guild.id, false, false)
-            guildConfig.once('newFile', (ready)=> {
-
-                guildConfig.register('prefix', 's!');
-                guildConfig.save();
-        
-                client.log('Config generated for ' + guild.name);
-                ready();
-        
-            })
-
-        })
-
     }
 
     postInit(){
 
+    }
 
+    getGuildConfig(guild, ret){
+
+        let guildConfig = new StorageManager(client, 'guilds/' + guild, false, false)
+
+        guildConfig.once('newFile', (ready)=> { ready(); })
+        guildConfig.once('ready', ()=> {
+
+            // lets go!
+            guildConfig.register('prefix', '.');
+            guildConfig.save();
+
+            ret(guildConfig)
+        
+        })
 
     }
 
