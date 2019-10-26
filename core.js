@@ -51,13 +51,13 @@
         client.addons = {};
 
         client.log( 'Logged into discord as user: [ ' + client.user.tag + ' ]' )
-        require('fs').readdirSync(__dirname + '/instance/').forEach(function(file) {
+        require('fs').readdirSync(__dirname + '/addons/').forEach(function(file) {
 
             // Log.
             client.debug('Loading ' + file);
 
             // Create a instance of the addon we just loaded.
-            let addon = require(__dirname + '/instance/' + file);
+            let addon = require(__dirname + '/addons/' + file);
             let addonInstance = new addon();
 
             // Store it somewhere in the cool shit.
