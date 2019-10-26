@@ -16,7 +16,6 @@
     client              = new Sylver({ shardCount: "auto" });
     config              = new StorageManager(client, 'config', true, false)
     parser              = require('discord-command-parser')
-    dashboard           = []
     
     client.log('Sylver is starting...')
     let initHold = client.createHold();
@@ -48,7 +47,6 @@
 
     client.on('ready', ()=> {	
 
-        dashboard = new Dashboard(client);
         client.addonList = [];
         client.addons = {};
 
