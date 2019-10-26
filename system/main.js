@@ -170,11 +170,6 @@ class Sylver extends Discord.Client {
 
         guildData.once('newFile', (ready)=> {
 
-
-                client.dataStorageDefaults.guilds.forEach( dataVar => {
-                    guildData.register(dataVar.key, dataVar.value);
-                })
-
                 guildData.save();
         
                 client.log('guildData generated for ' + guild.name);
@@ -184,7 +179,11 @@ class Sylver extends Discord.Client {
 
             guildData.once('ready', ()=> {
 
-                this.configs[guild.id] = guildData;
+                client.dataStorageDefaults.guilds.forEach( dataVar => {
+                    guildData.register(dataVar.key, dataVar.value);
+                })
+        
+                callback(guildData)
         
             })
 
@@ -205,11 +204,6 @@ class Sylver extends Discord.Client {
 
         userData.once('newFile', (ready)=> {
 
-
-                client.dataStorageDefaults.users.forEach( dataVar => {
-                    guildData.register(dataVar.key, dataVar.value);
-                })
-
                 userData.save();
         
                 client.log('userData generated for ' + guild.name);
@@ -219,7 +213,11 @@ class Sylver extends Discord.Client {
 
             userData.once('ready', ()=> {
 
-                this.configs[guild.id] = userData;
+                client.dataStorageDefaults.users.forEach( dataVar => {
+                    guildData.register(dataVar.key, dataVar.value);
+                })
+
+                callback(userData);
         
             })
 
