@@ -1,10 +1,10 @@
 {
   "name": "sylver",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "Sylver Framework for Discord.JS",
   "main": "core.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node core.js"
   },
   "repository": {
     "type": "git",
