@@ -14,6 +14,13 @@ class Sylver extends Discord.Client {
         this.uuid = require('uuid/v4');
         this.exiting = false;
 
+        this.dataStorageDefaults = {
+
+            guilds: [],
+            users: [],
+
+        }
+
         // Trigger the hold system when the process is being F'd
         this.holds = [];
         let obj = this;
@@ -107,14 +114,14 @@ class Sylver extends Discord.Client {
 
         /*
 
-            This system will make sure to keep the application from exiting while stuff is still going on
-            This will result in more clean reboots.
+            Using this will make sure that the process doesn't exit if you're doing something important.
+            Don't forget to release holds, Or the application will be stuck indefinetly.
 
             Usage Guide:
 
-                let hold = Sylver.createHold();
+                let hold = client.createHold();
                 // code to run
-                Sykver.resolveHold(hold);
+                client.resolveHold(hold);
 
         */
 
@@ -131,6 +138,90 @@ class Sylver extends Discord.Client {
     resolveHold(hold){
 
         delete this.holds[hold.id];
+
+    }
+
+    /*
+
+        Guild & User data storage
+
+    */
+
+    registerGuildData( key, value){
+        this.dataStorageDefaults.guilds.push({key: key, value: value});
+    }
+    
+    registerUserData( key, value){
+        this.dataStorageDefaults.users.push({key: key, value: value});
+    }  
+     
+    getGuildData( guildResolvable, callback ){
+
+        let client = this;
+        let guild = this.guilds.resolve(guildResolvable);
+
+        if(guild === undefined){ 
+            this.warn('Coud not resolve guild ' + guildResolvable);
+            callback(null);
+            return;
+        }
+
+        let guildData = new StorageManager(client, 'guilds/' + guild.id, false, false)
+
+        guildData.once('newFile', (ready)=> {
+
+
+                client.dataStorageDefaults.guilds.forEach( dataVar => {
+                    guildData.register(dataVar.key, dataVar.value);
+                })
+
+                guildData.save();
+        
+                client.log('guildData generated for ' + guild.name);
+                ready();
+        
+            })
+
+            guildData.once('ready', ()=> {
+
+                this.configs[guild.id] = guildData;
+        
+            })
+
+    }  
+
+    getUserData( userResolvable, callback ){
+
+        let client = this;
+        let user = this.users.resolve(userResolvable);
+
+        if(user === undefined){ 
+            this.warn('Coud not resolve user ' + userResolvable);
+            callback(null);
+            return;
+        }
+
+        let userData = new StorageManager(client, 'users/' + guild.id, false, false)
+
+        userData.once('newFile', (ready)=> {
+
+
+                client.dataStorageDefaults.users.forEach( dataVar => {
+                    guildData.register(dataVar.key, dataVar.value);
+                })
+
+                userData.save();
+        
+                client.log('userData generated for ' + guild.name);
+                ready();
+        
+            })
+
+            userData.once('ready', ()=> {
+
+                this.configs[guild.id] = userData;
+        
+            })
 
     }
 
